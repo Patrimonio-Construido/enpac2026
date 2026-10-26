@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 
 import "./StrokeText.css"
@@ -40,7 +40,6 @@ export default function StrokeText({
   const rootRef = useRef<HTMLSpanElement>(null)
   const textRef = useRef<SVGTextElement>(null)
   const [box, setBox] = useState<TextBox | null>(null)
-  const maskId = `stroke-text-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`
   const characters = Array.from(text)
 
   useLayoutEffect(() => {
@@ -130,11 +129,6 @@ export default function StrokeText({
         preserveAspectRatio="xMinYMid meet"
         style={box ? undefined : { visibility: "hidden" }}
       >
-        <defs>
-          <mask id={maskId}>
-            <rect width="100%" height="100%" fill="white" />
-          </mask>
-        </defs>
         <text
           ref={textRef}
           x="0"
@@ -158,7 +152,6 @@ export default function StrokeText({
           y="0"
           fill={fillColor}
           stroke="none"
-          mask={`url(#${maskId})`}
           style={textStyle}
         >
           {text}

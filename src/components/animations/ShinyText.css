@@ -9,7 +9,7 @@
     var(--shiny-base) 62%,
     var(--shiny-base) 100%
   );
-  background-position: 125% 0;
+  background-position: 100% 0;
   background-size: 250% 100%;
   background-repeat: no-repeat;
   background-clip: text;
@@ -20,7 +20,7 @@
 
 @keyframes shiny-text-sweep {
   to {
-    background-position: -125% 0;
+    background-position: 0% 0;
   }
 }
 

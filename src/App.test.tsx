@@ -1,8 +1,16 @@
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
+
 import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
 import App from "./App"
+
+const shinyTextStyles = readFileSync(
+  resolve(process.cwd(), "src/components/animations/ShinyText.css"),
+  "utf8",
+)
 
 describe("ENPAC", () => {
   it("renders the existing home page", () => {
@@ -25,6 +33,9 @@ describe("ENPAC", () => {
 
     expect(wordmark.classList.contains("stroke-text")).toBe(true)
     expect(wordmark.getAttribute("data-trigger")).toBe("mount")
+    expect(wordmark.querySelector("[data-stroke-fill]")?.hasAttribute("mask")).toBe(
+      false,
+    )
     expect(screen.getByRole("contentinfo").querySelector(".stroke-text")).toBeNull()
   })
 
@@ -37,6 +48,11 @@ describe("ENPAC", () => {
     })
 
     expect(registration.querySelector(".shiny-text")).not.toBeNull()
+  })
+
+  it("keeps the shiny label covered by its gradient for the full sweep", () => {
+    expect(shinyTextStyles).toContain("background-position: 100% 0")
+    expect(shinyTextStyles).toContain("background-position: 0% 0")
   })
 
   it("makes the home closing title react to pointer proximity", () => {
