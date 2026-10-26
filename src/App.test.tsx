@@ -117,4 +117,31 @@ describe("ENPAC", () => {
 
     window.matchMedia = originalMatchMedia
   })
+
+  it("skips mobile menu travel when reduced motion is requested", async () => {
+    const originalMatchMedia = window.matchMedia
+    window.matchMedia = (query: string) =>
+      ({
+        matches:
+          query.includes("max-width") || query.includes("reduced-motion"),
+        media: query,
+        onchange: null,
+        addListener: () => undefined,
+        removeListener: () => undefined,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+        dispatchEvent: () => false,
+      }) as MediaQueryList
+
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole("button", { name: "Abrir menu" }))
+    await user.click(screen.getByRole("button", { name: "Fechar menu" }))
+
+    expect(
+      (document.getElementById("main-navigation") as HTMLElement).style.display,
+    ).toBe("none")
+
+    window.matchMedia = originalMatchMedia
+  })
 })

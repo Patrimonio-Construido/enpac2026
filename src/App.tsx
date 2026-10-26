@@ -176,6 +176,21 @@ function Header({
         return
       }
 
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches
+      if (reducedMotion) {
+        gsap.set(navigation, {
+          autoAlpha: menuOpen ? 1 : 0,
+          y: 0,
+          display: menuOpen ? "flex" : "none",
+          pointerEvents: menuOpen ? "auto" : "none",
+        })
+        gsap.set(items, { clearProps: "opacity,transform" })
+        menuInitialized.current = true
+        return
+      }
+
       if (!menuInitialized.current && !menuOpen) {
         gsap.set(navigation, {
           autoAlpha: 0,
