@@ -6,7 +6,6 @@ import "./StrokeText.css"
 type StrokeTextProps = {
   text: string
   strokeColor?: string
-  fillColor?: string
   fontFamily?: string
   fontSize: number
   fontWeight?: number
@@ -27,7 +26,6 @@ type TextBox = {
 export default function StrokeText({
   text,
   strokeColor = "currentColor",
-  fillColor = "currentColor",
   fontFamily = "inherit",
   fontSize,
   fontWeight = 600,
@@ -71,7 +69,8 @@ export default function StrokeText({
     if (!root || !box) return
 
     const strokes = root.querySelectorAll<SVGElement>("[data-stroke-char]")
-    const fill = root.querySelector<SVGElement>("[data-stroke-fill]")
+    const original = root.querySelector<HTMLElement>("[data-brand-original]")
+    const overlay = root.querySelector<SVGElement>(".stroke-text-part__svg")
     const dash = Math.max(fontSize * 7, 200)
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -79,7 +78,8 @@ export default function StrokeText({
 
     if (reduceMotion) {
       gsap.set(strokes, { strokeDasharray: dash, strokeDashoffset: 0 })
-      gsap.set(fill, { opacity: 1 })
+      gsap.set(original, { opacity: 1 })
+      gsap.set(overlay, { display: "none" })
       return
     }
 
@@ -89,7 +89,8 @@ export default function StrokeText({
         strokeDashoffset: dash,
         strokeOpacity: 1,
       })
-      gsap.set(fill, { opacity: 0 })
+      gsap.set(original, { opacity: 0 })
+      gsap.set(overlay, { display: "block", opacity: 1 })
 
       gsap
         .timeline({ delay })
@@ -99,7 +100,13 @@ export default function StrokeText({
           ease: "power2.out",
           stagger: 0.035,
         })
-        .to(fill, { opacity: 1, duration: 0.28, ease: "power1.out" }, "-=0.2")
+        .to(
+          original,
+          { opacity: 1, duration: 0.28, ease: "power1.out" },
+          "-=0.2",
+        )
+        .to(overlay, { opacity: 0, duration: 0.18, ease: "power1.out" }, "<")
+        .set(overlay, { display: "none" })
     }, root)
 
     return () => context.revert()
@@ -120,9 +127,11 @@ export default function StrokeText({
     <span
       ref={rootRef}
       className={`stroke-text-part ${className}`.trim()}
-      style={{ fontSize: `${fontSize}px` }}
       aria-hidden="true"
     >
+      <span data-brand-original="" data-stroke-fill="">
+        {text}
+      </span>
       <svg
         className="stroke-text-part__svg"
         viewBox={viewBox}
@@ -145,16 +154,6 @@ export default function StrokeText({
               {character}
             </tspan>
           ))}
-        </text>
-        <text
-          data-stroke-fill=""
-          x="0"
-          y="0"
-          fill={fillColor}
-          stroke="none"
-          style={textStyle}
-        >
-          {text}
         </text>
       </svg>
     </span>

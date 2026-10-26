@@ -1,13 +1,17 @@
 .stroke-text-part {
-  display: inline-flex;
-  line-height: 0;
+  position: relative;
 }
 
 .stroke-text-part__svg {
+  position: absolute;
+  top: 50%;
+  left: 0;
   display: block;
   width: auto;
   height: 1em;
   overflow: visible;
+  pointer-events: none;
+  transform: translateY(-50%);
 }
 
 .stroke-text-part text {

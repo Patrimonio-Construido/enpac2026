@@ -12,6 +12,11 @@ const shinyTextStyles = readFileSync(
   "utf8",
 )
 
+const strokeTextStyles = readFileSync(
+  resolve(process.cwd(), "src/components/animations/StrokeText.css"),
+  "utf8",
+)
+
 describe("ENPAC", () => {
   it("renders the existing home page", () => {
     render(<App />)
@@ -37,6 +42,27 @@ describe("ENPAC", () => {
       false,
     )
     expect(screen.getByRole("contentinfo").querySelector(".stroke-text")).toBeNull()
+  })
+
+  it("keeps the original wordmark as the visual and layout source", () => {
+    render(<App />)
+
+    const brandButton = screen.getByRole("button", {
+      name: "Ir para a Página Inicial",
+    })
+
+    expect(
+      brandButton.querySelector(".brand-name > [data-brand-original]")
+        ?.textContent,
+    ).toBe("ENPAC")
+    expect(
+      brandButton.querySelector(".brand-year > [data-brand-original]")
+        ?.textContent,
+    ).toBe("2026")
+    expect(strokeTextStyles).toContain("position: absolute")
+    expect(strokeTextStyles).not.toMatch(
+      /\.stroke-text-part__svg\s*\{[^}]*display:\s*none/s,
+    )
   })
 
   it("adds the shiny treatment only to the header registration label", () => {
