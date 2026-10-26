@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 
 import AnimatedContent from "./components/animations/AnimatedContent"
-import GooeyNavEffect from "./components/animations/GooeyNavEffect"
 import StrokeText from "./components/animations/StrokeText"
 import ShinyText from "./components/animations/ShinyText"
 import VariableProximity from "./components/animations/VariableProximity"
@@ -290,9 +289,7 @@ function Header({
           aria-label="Navegação principal"
           data-mobile-animation="gsap"
         >
-          <GooeyNavEffect
-            activeIndex={pages.findIndex((page) => page.id === activePage)}
-          >
+          <div className="nav-links">
             {pages.map((page) => (
               <button
                 key={page.id}
@@ -304,7 +301,7 @@ function Header({
                 {page.label}
               </button>
             ))}
-          </GooeyNavEffect>
+          </div>
           <button type="button" className="button button-small button-peach">
             <ShinyText
               color="var(--navy-dark)"

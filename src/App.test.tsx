@@ -79,7 +79,7 @@ describe("ENPAC", () => {
     expect(registration.querySelector(".shiny-text")).not.toBeNull()
   })
 
-  it("adds the gooey desktop layer without replacing the navigation buttons", () => {
+  it("keeps the original header navigation without a gooey effect layer", () => {
     render(<App />)
 
     const header = screen.getByRole("banner")
@@ -88,8 +88,11 @@ describe("ENPAC", () => {
       ? within(navigation).getAllByRole("button")
       : []
 
-    expect(navigation?.getAttribute("data-gooey-nav")).toBe("desktop")
-    expect(navigation?.querySelector("[data-gooey-layer]")).not.toBeNull()
+    expect(navigation?.parentElement?.classList.contains("main-navigation")).toBe(
+      true,
+    )
+    expect(navigation?.hasAttribute("data-gooey-nav")).toBe(false)
+    expect(navigation?.querySelector("[data-gooey-layer]")).toBeNull()
     expect(buttons.map((button) => button.textContent)).toEqual(
       ["Página Inicial", "Palestrantes", "Programação", "Edições Anteriores"],
     )
