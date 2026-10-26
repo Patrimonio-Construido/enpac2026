@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 
+import AnimatedContent from "./components/animations/AnimatedContent"
 import StrokeText from "./components/animations/StrokeText"
 import ShinyText from "./components/animations/ShinyText"
 import VariableProximity from "./components/animations/VariableProximity"
@@ -537,7 +538,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
         </article>
       </section>
 
-      <section className="program-preview section">
+      <AnimatedContent className="program-preview section">
         <div className="program-preview-header">
           <SectionHeading
             eyebrow="O que esperar"
@@ -562,7 +563,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
             </article>
           ))}
         </div>
-      </section>
+      </AnimatedContent>
 
       <section className="speaker-preview section">
         <div className="speaker-preview-image">

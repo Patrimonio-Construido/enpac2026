@@ -94,6 +94,18 @@ describe("ENPAC", () => {
     expect(title.querySelector(".variable-proximity")).not.toBeNull()
   })
 
+  it("reveals the program preview when it enters the viewport", () => {
+    render(<App />)
+
+    const title = screen.getByRole("heading", {
+      name: "Três dias para ampliar perspectivas.",
+    })
+    const preview = title.closest("[data-animation='animated-content']")
+
+    expect(preview).not.toBeNull()
+    expect(preview?.getAttribute("data-trigger")).toBe("viewport")
+  })
+
   it("keeps the current page mounted while the GSAP exit transition runs", async () => {
     const user = userEvent.setup()
     render(<App />)
