@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import StrokeText from "./components/animations/StrokeText"
+import ShinyText from "./components/animations/ShinyText"
 
 type Page = "inicio" | "palestrantes" | "programacao" | "edicoes"
 
@@ -190,7 +191,13 @@ function Header({
             ))}
           </div>
           <button type="button" className="button button-small button-peach">
-            Inscrições em breve
+            <ShinyText
+              color="var(--navy-dark)"
+              shineColor="var(--white)"
+              speed={3.2}
+            >
+              Inscrições em breve
+            </ShinyText>
           </button>
         </nav>
       </div>

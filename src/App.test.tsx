@@ -25,4 +25,15 @@ describe("ENPAC", () => {
     expect(wordmark.classList.contains("stroke-text")).toBe(true)
     expect(wordmark.getAttribute("data-trigger")).toBe("mount")
   })
+
+  it("adds the shiny treatment only to the header registration label", () => {
+    render(<App />)
+
+    const header = screen.getByRole("banner")
+    const registration = within(header).getByRole("button", {
+      name: "Inscrições em breve",
+    })
+
+    expect(registration.querySelector(".shiny-text")).not.toBeNull()
+  })
 })
