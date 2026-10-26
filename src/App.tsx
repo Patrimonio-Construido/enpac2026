@@ -124,19 +124,11 @@ function Brand({ animated = false }: { animated?: boolean }) {
       <StrokeText
         className="brand-name"
         text="ENPAC"
-        fontFamily="Cormorant Garamond, Georgia, serif"
-        fontSize={32}
-        fontWeight={600}
-        letterSpacing={-1.28}
         strokeWidth={0.75}
       />
       <StrokeText
         className="brand-year"
         text="2026"
-        fontFamily="Montserrat, Arial, sans-serif"
-        fontSize={10.88}
-        fontWeight={700}
-        letterSpacing={1.52}
         strokeWidth={0.45}
         delay={0.1}
       />

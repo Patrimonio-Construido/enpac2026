@@ -59,10 +59,13 @@ describe("ENPAC", () => {
       brandButton.querySelector(".brand-year > [data-brand-original]")
         ?.textContent,
     ).toBe("2026")
-    expect(strokeTextStyles).toContain("position: absolute")
-    expect(strokeTextStyles).not.toMatch(
-      /\.stroke-text-part__svg\s*\{[^}]*display:\s*none/s,
+    expect(
+      brandButton.querySelector(".brand-name > [data-stroke-animated]"),
+    ).toBe(
+      brandButton.querySelector(".brand-name > [data-brand-original]"),
     )
+    expect(brandButton.querySelector("svg")).toBeNull()
+    expect(strokeTextStyles).not.toContain("position: absolute")
   })
 
   it("adds the shiny treatment only to the header registration label", () => {
