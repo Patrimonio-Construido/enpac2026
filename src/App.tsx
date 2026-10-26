@@ -145,6 +145,99 @@ function Header({
   onNavigate: (page: Page) => void
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigationRef = useRef<HTMLElement>(null)
+  const menuTimeline = useRef<gsap.core.Timeline | null>(null)
+  const menuInitialized = useRef(false)
+
+  useLayoutEffect(() => {
+    const navigation = navigationRef.current
+    if (!navigation) return
+
+    const mobile = window.matchMedia("(max-width: 1080px)")
+    const items = navigation.querySelectorAll(
+      ".nav-links button, .button-peach",
+    )
+
+    const animate = () => {
+      menuTimeline.current?.kill()
+      gsap.killTweensOf([navigation, ...items])
+
+      if (!mobile.matches) {
+        gsap.set([navigation, ...items], { clearProps: "all" })
+        return
+      }
+
+      if (!menuInitialized.current && !menuOpen) {
+        gsap.set(navigation, {
+          autoAlpha: 0,
+          y: -12,
+          display: "none",
+          pointerEvents: "none",
+        })
+        menuInitialized.current = true
+        return
+      }
+
+      if (menuOpen) {
+        gsap.set(navigation, {
+          display: "flex",
+          visibility: "visible",
+          pointerEvents: "auto",
+        })
+        menuTimeline.current = gsap
+          .timeline()
+          .fromTo(
+            navigation,
+            { opacity: 0, y: -12 },
+            { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" },
+          )
+          .fromTo(
+            items,
+            { opacity: 0, y: -8 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.24,
+              stagger: 0.045,
+              ease: "power2.out",
+            },
+            "-=0.16",
+          )
+      } else {
+        menuTimeline.current = gsap
+          .timeline({
+            onComplete: () => {
+              gsap.set(navigation, {
+                display: "none",
+                pointerEvents: "none",
+              })
+            },
+          })
+          .to(items, {
+            opacity: 0,
+            y: -5,
+            duration: 0.12,
+            stagger: 0.02,
+            ease: "power1.in",
+          })
+          .to(
+            navigation,
+            { autoAlpha: 0, y: -12, duration: 0.18, ease: "power1.in" },
+            "-=0.08",
+          )
+      }
+
+      menuInitialized.current = true
+    }
+
+    animate()
+    mobile.addEventListener("change", animate)
+
+    return () => {
+      mobile.removeEventListener("change", animate)
+      menuTimeline.current?.kill()
+    }
+  }, [menuOpen])
 
   const navigate = (page: Page) => {
     onNavigate(page)
@@ -175,9 +268,11 @@ function Header({
         </button>
 
         <nav
+          ref={navigationRef}
           id="main-navigation"
           className={`main-navigation ${menuOpen ? "is-open" : ""}`}
           aria-label="Navegação principal"
+          data-mobile-animation="gsap"
         >
           <div className="nav-links">
             {pages.map((page) => (

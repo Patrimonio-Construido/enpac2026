@@ -69,4 +69,35 @@ describe("ENPAC", () => {
       { timeout: 1000 },
     )
   })
+
+  it("uses GSAP to reveal the mobile navigation", async () => {
+    const originalMatchMedia = window.matchMedia
+    window.matchMedia = (query: string) =>
+      ({
+        matches: query.includes("max-width"),
+        media: query,
+        onchange: null,
+        addListener: () => undefined,
+        removeListener: () => undefined,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+        dispatchEvent: () => false,
+      }) as MediaQueryList
+
+    const user = userEvent.setup()
+    render(<App />)
+    const toggle = screen.getByRole("button", { name: "Abrir menu" })
+
+    await user.click(toggle)
+
+    const navigation = screen.getByRole("navigation", {
+      name: "Navegação principal",
+    })
+
+    expect(toggle.getAttribute("aria-expanded")).toBe("true")
+    expect(navigation.getAttribute("data-mobile-animation")).toBe("gsap")
+    expect(navigation.style.visibility).toBe("visible")
+
+    window.matchMedia = originalMatchMedia
+  })
 })
