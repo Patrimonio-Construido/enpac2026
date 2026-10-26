@@ -1,4 +1,5 @@
-import { render, screen, within } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
 import App from "./App"
@@ -45,5 +46,27 @@ describe("ENPAC", () => {
     })
 
     expect(title.querySelector(".variable-proximity")).not.toBeNull()
+  })
+
+  it("keeps the current page mounted while the GSAP exit transition runs", async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(
+      within(screen.getByRole("banner")).getByRole("button", {
+        name: "Palestrantes",
+      }),
+    )
+
+    expect(
+      screen.getByRole("heading", { name: /memória em\s*movimento/i }),
+    ).not.toBeNull()
+    await waitFor(
+      () =>
+        expect(
+          screen.getByRole("heading", { name: "Palestrantes" }),
+        ).not.toBeNull(),
+      { timeout: 1000 },
+    )
   })
 })

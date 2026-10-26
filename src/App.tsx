@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { gsap } from "gsap"
 
 import StrokeText from "./components/animations/StrokeText"
 import ShinyText from "./components/animations/ShinyText"
@@ -743,13 +744,74 @@ function EditionsPage() {
 
 export default function App() {
   const [activePage, setActivePage] = useState<Page>("inicio")
+  const mainRef = useRef<HTMLElement>(null)
+  const pageTween = useRef<gsap.core.Tween | null>(null)
+  const hasNavigated = useRef(false)
 
   const navigate = (page: Page) => {
-    setActivePage(page)
-    window.requestAnimationFrame(() => {
+    if (page === activePage) {
       window.scrollTo({ top: 0, behavior: "smooth" })
+      return
+    }
+
+    const main = mainRef.current
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+
+    pageTween.current?.kill()
+
+    if (!main || reducedMotion) {
+      hasNavigated.current = true
+      setActivePage(page)
+      window.scrollTo({ top: 0, behavior: "auto" })
+      return
+    }
+
+    pageTween.current = gsap.to(main, {
+      opacity: 0,
+      y: -14,
+      duration: 0.18,
+      ease: "power1.in",
+      onComplete: () => {
+        hasNavigated.current = true
+        setActivePage(page)
+        window.scrollTo({ top: 0, behavior: "auto" })
+      },
     })
   }
+
+  useLayoutEffect(() => {
+    const main = mainRef.current
+    if (!main || !hasNavigated.current) return
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+    if (reducedMotion) {
+      gsap.set(main, { clearProps: "opacity,transform" })
+      return
+    }
+
+    pageTween.current = gsap.fromTo(
+      main,
+      { opacity: 0, y: 18 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.42,
+        ease: "power3.out",
+        clearProps: "opacity,transform",
+      },
+    )
+  }, [activePage])
+
+  useEffect(
+    () => () => {
+      pageTween.current?.kill()
+    },
+    [],
+  )
 
   useEffect(() => {
     document.title =
@@ -761,7 +823,7 @@ export default function App() {
   return (
     <div className="site-shell">
       <Header activePage={activePage} onNavigate={navigate} />
-      <main id="main-content">
+      <main id="main-content" ref={mainRef} data-transition="gsap">
         {activePage === "inicio" && <HomePage onNavigate={navigate} />}
         {activePage === "palestrantes" && <SpeakersPage />}
         {activePage === "programacao" && <SchedulePage />}
