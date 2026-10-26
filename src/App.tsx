@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 
+import StrokeText from "./components/animations/StrokeText"
+
 type Page = "inicio" | "palestrantes" | "programacao" | "edicoes"
 
 type ScheduleItem = {
@@ -101,9 +103,33 @@ function MenuIcon({ open }: { open: boolean }) {
 
 function Brand() {
   return (
-    <span className="brand" aria-label="ENPAC 2026">
-      <span className="brand-name">ENPAC</span>
-      <span className="brand-year">2026</span>
+    <span
+      className="brand stroke-text"
+      role="img"
+      aria-label="ENPAC 2026"
+      data-trigger="mount"
+    >
+      <span className="brand-name">
+        <StrokeText
+          text="ENPAC"
+          fontFamily="Cormorant Garamond, Georgia, serif"
+          fontSize={32}
+          fontWeight={600}
+          letterSpacing={-1.28}
+          strokeWidth={0.75}
+        />
+      </span>
+      <span className="brand-year">
+        <StrokeText
+          text="2026"
+          fontFamily="Montserrat, Arial, sans-serif"
+          fontSize={10.88}
+          fontWeight={700}
+          letterSpacing={1.52}
+          strokeWidth={0.45}
+          delay={0.1}
+        />
+      </span>
     </span>
   )
 }

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, within } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
 import App from "./App"
@@ -10,5 +10,19 @@ describe("ENPAC", () => {
     expect(
       screen.getByRole("heading", { name: /memória em\s*movimento/i }),
     ).not.toBeNull()
+  })
+
+  it("draws the complete ENPAC 2026 wordmark on initial load", () => {
+    render(<App />)
+
+    const brandButton = screen.getByRole("button", {
+      name: "Ir para a Página Inicial",
+    })
+    const wordmark = within(brandButton).getByRole("img", {
+      name: "ENPAC 2026",
+    })
+
+    expect(wordmark.classList.contains("stroke-text")).toBe(true)
+    expect(wordmark.getAttribute("data-trigger")).toBe("mount")
   })
 })
