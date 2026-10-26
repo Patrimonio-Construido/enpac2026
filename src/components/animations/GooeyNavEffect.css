@@ -1,0 +1,51 @@
+.gooey-nav-effect {
+  position: relative;
+  isolation: isolate;
+}
+
+.gooey-nav-effect__filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.gooey-nav-effect__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.gooey-nav-effect__indicator,
+.gooey-nav-effect__particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  border-radius: 999px;
+  background: var(--peach);
+  transform-origin: center;
+}
+
+.gooey-nav-effect__indicator {
+  opacity: 0.56;
+}
+
+.gooey-nav-effect__particle {
+  width: 6px;
+  height: 6px;
+  opacity: 0;
+}
+
+.gooey-nav-effect > button {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1080px) {
+  .gooey-nav-effect__filter,
+  .gooey-nav-effect__layer {
+    display: none !important;
+  }
+}

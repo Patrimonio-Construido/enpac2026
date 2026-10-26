@@ -79,6 +79,22 @@ describe("ENPAC", () => {
     expect(registration.querySelector(".shiny-text")).not.toBeNull()
   })
 
+  it("adds the gooey desktop layer without replacing the navigation buttons", () => {
+    render(<App />)
+
+    const header = screen.getByRole("banner")
+    const navigation = header.querySelector<HTMLElement>(".nav-links")
+    const buttons = navigation
+      ? within(navigation).getAllByRole("button")
+      : []
+
+    expect(navigation?.getAttribute("data-gooey-nav")).toBe("desktop")
+    expect(navigation?.querySelector("[data-gooey-layer]")).not.toBeNull()
+    expect(buttons.map((button) => button.textContent)).toEqual(
+      ["Página Inicial", "Palestrantes", "Programação", "Edições Anteriores"],
+    )
+  })
+
   it("keeps the shiny label covered by its gradient for the full sweep", () => {
     expect(shinyTextStyles).toContain("background-position: 100% 0")
     expect(shinyTextStyles).toContain("background-position: 0% 0")
