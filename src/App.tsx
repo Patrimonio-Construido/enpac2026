@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import StrokeText from "./components/animations/StrokeText"
 import ShinyText from "./components/animations/ShinyText"
+import VariableProximity from "./components/animations/VariableProximity"
 
 type Page = "inicio" | "palestrantes" | "programacao" | "edicoes"
 
@@ -498,20 +499,36 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
         </div>
       </section>
 
-      <CallToAction />
+      <CallToAction interactive />
     </>
   )
 }
 
-function CallToAction() {
+function CallToAction({ interactive = false }: { interactive?: boolean }) {
+  const proximityContainer = useRef<HTMLDivElement>(null)
+
   return (
     <section className="final-cta">
       <span className="cta-decoration" aria-hidden="true">
         ENPAC
       </span>
-      <div>
+      <div ref={proximityContainer}>
         <Eyebrow>ENPAC 2026</Eyebrow>
-        <h2>O próximo encontro começa por aqui.</h2>
+        <h2>
+          {interactive ? (
+            <VariableProximity
+              label="O próximo encontro começa por aqui."
+              containerRef={proximityContainer}
+              fromFontVariationSettings="'wght' 500"
+              toFontVariationSettings="'wght' 700"
+              radius={145}
+              falloff="gaussian"
+              smoothing={0.2}
+            />
+          ) : (
+            "O próximo encontro começa por aqui."
+          )}
+        </h2>
         <p>
           As datas e inscrições serão anunciadas em breve. Acompanhe as redes do
           projeto para receber novidades.

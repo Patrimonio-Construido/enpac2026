@@ -36,4 +36,14 @@ describe("ENPAC", () => {
 
     expect(registration.querySelector(".shiny-text")).not.toBeNull()
   })
+
+  it("makes the home closing title react to pointer proximity", () => {
+    render(<App />)
+
+    const title = screen.getByRole("heading", {
+      name: "O próximo encontro começa por aqui.",
+    })
+
+    expect(title.querySelector(".variable-proximity")).not.toBeNull()
+  })
 })
