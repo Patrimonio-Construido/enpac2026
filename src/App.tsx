@@ -104,7 +104,16 @@ function MenuIcon({ open }: { open: boolean }) {
   )
 }
 
-function Brand() {
+function Brand({ animated = false }: { animated?: boolean }) {
+  if (!animated) {
+    return (
+      <span className="brand" aria-label="ENPAC 2026">
+        <span className="brand-name">ENPAC</span>
+        <span className="brand-year">2026</span>
+      </span>
+    )
+  }
+
   return (
     <span
       className="brand stroke-text"
@@ -252,7 +261,7 @@ function Header({
           onClick={() => navigate("inicio")}
           aria-label="Ir para a Página Inicial"
         >
-          <Brand />
+          <Brand animated />
         </button>
 
         <button

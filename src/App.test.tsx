@@ -25,6 +25,7 @@ describe("ENPAC", () => {
 
     expect(wordmark.classList.contains("stroke-text")).toBe(true)
     expect(wordmark.getAttribute("data-trigger")).toBe("mount")
+    expect(screen.getByRole("contentinfo").querySelector(".stroke-text")).toBeNull()
   })
 
   it("adds the shiny treatment only to the header registration label", () => {
