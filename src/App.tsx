@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 
 import AnimatedContent from "./components/animations/AnimatedContent"
@@ -16,7 +16,7 @@ type ScheduleItem = {
   participants: string
 }
 
-const pages: { id: Page label: string }[] = [
+const pages: { id: Page; label: string }[] = [
   { id: "inicio", label: "Página Inicial" },
   { id: "palestrantes", label: "Palestrantes" },
   { id: "programacao", label: "Programação" },
@@ -30,10 +30,93 @@ const photos = {
   arch: "https://images.unsplash.com/photo-1668715590722-9b10644387cd?auto=format&fit=crop&w=1400&q=85",
 }
 
-const speakerPlaceholders = Array.from({ length: 6 }, (_, index) => ({
-  number: String(index + 1).padStart(2, "0"),
-  image: [photos.oldDoor, photos.blueDoor, photos.arch][index % 3],
-}))
+type Speaker = {
+  id: number
+  name: string
+  image: string
+  lecture: string
+  /** Biografia: cada item do array é um parágrafo. Vazio = aviso "em breve". */
+  bio: string[]
+}
+
+const speakers: Speaker[] = [
+  {
+    id: 0,
+    name: "Karina Roquete",
+    image: "/speakers/karina_roquete.png",
+    lecture: "Entre a Memória e a Matéria: Manifestações Patológicas e o Desafio de Restaurar para Preservar",
+    bio: [
+      "Arquitetura e Urbanismo – Concluído em dezembro 2003 - Faculdade de Arquitetura e Urbanismo Itaúna /MG.",
+      "Pós-Graduação em Gestão da Construção Civil Pública – Concluído em dezembro de 2009 - Universidade Federal de Minas Gerais – UFMG.",
+      "Planejamento Governamental e Gestão Orçamentária e Financeira - Abril 2013 - Tribunal de Contas da União.",
+      "Gerenciamento do Canteiro de Obras - abril de 2013 - Meta Consultores Ltda.",
+      "Auditoria e Fiscalização de Obras Públicas – promovido pela Controladoria Geral do Estado de Minas Gerais – novembro de 2016.",
+      "I Congresso Internacional Gestão dos Patrimônios da Humanidade Urbanos: desafios e riscos da preservação I Simpósio Internacional Patrimônios da Humanidade Mineiros no Contexto Internacional. Palestrante: O tombamento e a unidade de conservação da natureza como instrumentos de gestão do patrimônio mundial: o caso da Serra dos Cristais – Diamantina/MG",
+      "Pós-Graduação em Conservação e Gestão do Patrimônio Cultural – Conclusão abril de 2024 - Pontifícia Universidade Católica de Minas Gerais."
+    ],
+  },
+  {
+    id: 1,
+    name: "Caroline Amormino",
+    image: "/speakers/caroline_amormino.png",
+    lecture: "Tecnologia Como Subsídio à Tomada de Decisão: O Caso do Museu da Moda de Belo Horizonte",
+    bio: [
+      "Arquiteta e Urbanista, Especialista em BIM e em Gestão de Projetos (PUC Minas), com trajetória profissional nos setores de indústria, siderurgia e mineração.",
+      "Iniciou sua carreira na arquitetura e direcionou sua atuação para a transformação digital, desenvolvendo experiência em implementação e gestão de processos BIM, coordenação de projetos multidisciplinares e atuação como BIM Manager.",
+      "Desde 2024, atua como Especialista BIM na Superintendência de Desenvolvimento da Capital (SUDECAP), contribuindo para a implementação e consolidação do BIM na administração pública, na interface entre tecnologia, processos, pessoas e gestão.",
+      "Atua em frentes de governança, estruturação de processos, requisitos, gestão da informação, fiscalização e capacitação, além do desenvolvimento e disseminação de documentos e diretrizes BIM.",
+      "É também mentora voluntária no programa internacional Women in BIM, contribuindo para o desenvolvimento profissional e o fortalecimento da presença feminina na transformação digital da construção civil."
+    ],
+  },
+  {
+    id: 2,
+    name: "Rodrigo Figueiredo Reis",
+    image: "/speakers/rodrigo_reis.png",
+    lecture: "Ciência, Tecnologia e Preservação: IoT e inteligência de dados no patrimônio cultural edificado",
+    bio: [
+      "Arquiteto e urbanista, doutorando em Inovação Tecnológica pela Universidade Federal de Minas Gerais (UFMG), sob orientação do Prof. Dr. Adriano César Machado Pereira, mestre em Patrimônio Cultural e graduado em Arquitetura e Urbanismo pela Universidade Federal do Rio de Janeiro (UFRJ).",
+      "Sua pesquisa investiga a aplicação de Internet das Coisas (IoT) e aprendizado de máquina (machine learning) ao monitoramento do patrimônio cultural edificado, articulando sensores, processamento de borda e análise de dados para apoiar a identificação precoce de alterações e subsidiar decisões de conservação preventiva.",
+      "Possui mais de 20 anos de atuação em órgãos de patrimônio cultural, com experiência em projetos, planejamento e gerenciamento de obras de conservação e restauro, além de planejamento estratégico voltado à preservação.",
+      "É professor universitário e arquiteto da Prefeitura de Contagem (MG), com trajetória que integra pesquisa, prática profissional e inovação tecnológica aplicada ao patrimônio."
+    ],
+  },
+  {
+    id: 3,
+    name: "Francielle Ferreira Montanari",
+    image: "/speakers/francielle_montanari.png",
+    lecture: "Diagnóstico e Mapeamento de Danos em Estruturas de Concreto Armado Modernistas por Ensaios Não Destrutivos: O Caso do Museu de Arte da Pampulha",
+    bio: [
+      "Arquiteta e Urbanista e Especialista em Conservação e Gestão do Patrimônio Cultural pela PUC Minas, Doutoranda e Mestra pelo Programa de Pós-Graduação em Ambiente Construído e Patrimônio Sustentável da Escola de Arquitetura da Universidade Federal de Minas Gerais (PACPS/UFMG).",
+      "Foi pesquisadora bolsista da FAPEMIG, desenvolvendo investigação voltada ao diagnóstico patológico e à restauração de estruturas em concreto armado no patrimônio moderno, tendo como objeto de estudo o Conjunto Arquitetônico da Pampulha.",
+      "Integrante do Comitê de Jovens Pesquisadores do ICOMOS Brasil, atuou no ensino superior em estágios de docência na UFMG (Escola de Arquitetura e Escola de Belas Artes) e na pós-graduação de Gestão de Projetos de Patrimônio Cultural da UEMG.",
+      "No âmbito profissional, possui experiência no gerenciamento de projetos e obras de restauração do patrimônio cultural, com atuação técnica junto ao IEPHA/MG.",
+      "Atualmente, realiza assessoramento técnico ao Ministério Público de Minas Gerais, por meio da Plataforma Semente (CeMAIS/MPMG), no acompanhamento, análise e monitoramento de projetos socioambientais e de preservação do patrimônio cultural."
+    ],
+  },
+  {
+    id: 4,
+    name: "Ana Regina Mizrahy Cuperschmid",
+    image: "/speakers/ana_cuperschmid.png",
+    lecture: "HBIM: modelar, simular, diagnosticar e difundir",
+    bio: [
+      "Professora Associada da Faculdade de Engenharia Civil, Arquitetura e Urbanismo (FECFAU) da UNICAMP, atuando na graduação e pós-graduação da instituição.",
+      "Possui pós-doutorado pelo Programa de Pós-Graduação em Arquitetura, Tecnologia e Cidade (PPGATC) da UNICAMP e pelo Programa de Pós-Graduação do Instituto de Arquitetura e Urbanismo (IAU) da USP.",
+      "Doutora pelo PPGATC; Mestre em Artes pelo Instituto de Artes (IA), UNICAMP, especialista em Gestão de Projetos e graduada em Arquitetura e Urbanismo pela Universidade Federal de Viçosa (UFV).",
+      "Desenvolve pesquisas centradas no uso criativo e colaborativo de tecnologias digitais para arquitetura e construção.",
+      "Tem lecionado, conduzido pesquisas e publicado em áreas sobre Building Information Modeling (BIM), Heritage Building Information Modeling (HBIM), Realidade Virtual e Aumentada. Atualmente, atua como vice-chefe do Departamento de Arquitetura e Construção da FECFAU."
+    ],
+  },
+  {
+    id: 5,
+    name: "Andréa Lanna Mendes Novais",
+    image: "/speakers/andrea_novais.png",
+    lecture: "Caminhos da Preservação: Experiências, Avanços e os Desafios Contemporâneos",
+    bio: [
+      "Arquiteta Urbanista , especialista em Urbanismo, especialista em Revitalização Urbana e Arquitetônica.",
+      "Analista do Ministério Público de Minas Gerais, atua na Coordenadoria das Promotorias de Patrimonio Cultural e Turístico desde 2008."
+    ],
+  },
+]
 
 const schedule: ScheduleItem[][] = [
   [
@@ -409,12 +492,9 @@ function Footer({ onNavigate }: { onNavigate: (page: Page) => void }) {
       <div className="institutional-row">
         <p>Realização e apoio</p>
         <div className="institutional-logos">
-          <img
-            src="/brand/projeto-patrimonio-construido.png"
-            alt="Projeto Patrimônio Construído"
-          />
-          <img src="/brand/puc-minas.png" alt="PUC Minas" />
           <img src="/brand/ufmg.png" alt="UFMG" />
+          <img src="/brand/puc-minas.png" alt="PUC Minas" />
+          <img src="/brand/projeto-patrimonio-construido.png" alt="Projeto Patrimônio Construído" />
         </div>
       </div>
 
@@ -711,7 +791,77 @@ function PageIntro({
   )
 }
 
+function SpeakerBioModal({
+  speaker,
+  onClose,
+}: {
+  speaker: Speaker
+  onClose: () => void
+}) {
+  const closeButton = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    closeButton.current?.focus()
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", onKeyDown)
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown)
+      document.body.style.overflow = previousOverflow
+      opener?.focus()
+    }
+  }, [onClose])
+
+  return (
+    <div className="bio-overlay" onClick={onClose}>
+      <div
+        className="bio-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bio-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button
+          ref={closeButton}
+          className="bio-close"
+          type="button"
+          aria-label="Fechar biografia"
+          onClick={onClose}
+        >
+          ×
+        </button>
+        <div className="bio-image">
+          <img src={speaker.image} alt={`Retrato de ${speaker.name}`} />
+        </div>
+        <div className="bio-content">
+          <Eyebrow>Biografia</Eyebrow>
+          <h2 id="bio-title">{speaker.name}</h2>
+          <p className="bio-lecture">{speaker.lecture}</p>
+          <div className="bio-text">
+            {speaker.bio.length > 0 ? (
+              speaker.bio.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))
+            ) : (
+              <p>A biografia completa será publicada em breve.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function SpeakersPage() {
+  const [activeSpeaker, setActiveSpeaker] = useState<Speaker | null>(null)
+  const closeBio = useCallback(() => setActiveSpeaker(null), [])
+
   return (
     <>
       <PageIntro
@@ -721,28 +871,34 @@ function SpeakersPage() {
       />
 
       <section className="speakers-grid section" aria-label="Palestrantes">
-        {speakerPlaceholders.map((speaker) => (
-          <article className="speaker-card" key={speaker.number}>
+        {speakers.map((speaker) => (
+          <article className="speaker-card" key={speaker.id}>
             <div className="speaker-image">
               <img src={speaker.image} alt="" />
-              <span>{speaker.number}</span>
             </div>
             <div className="speaker-card-copy">
-              <h2>Nome do palestrante</h2>
-              <p>Instituição · País</p>
-              <span>Tema da participação a confirmar</span>
+              <h2>{speaker.name}</h2>
+              <span>{speaker.lecture}</span>
+              <button
+                className="text-link speaker-bio-button"
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => setActiveSpeaker(speaker)}
+              >
+                Ler biografia
+                <ArrowIcon />
+              </button>
             </div>
           </article>
         ))}
       </section>
 
-      <aside className="announcement section">
-        <span>Novos nomes</span>
-        <p>
-          A programação está em construção. Acompanhe os canais do projeto para
-          conhecer as próximas pessoas convidadas.
-        </p>
-      </aside>
+      {activeSpeaker && (
+        <SpeakerBioModal
+          speaker={activeSpeaker}
+          onClose={closeBio}
+        />
+      )}
       <CallToAction />
     </>
   )
