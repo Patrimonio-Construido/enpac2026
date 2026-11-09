@@ -144,3 +144,6 @@
 *.stl                filter=lfs diff=lfs merge=lfs -text
 *.nc                 filter=lfs diff=lfs merge=lfs -text
 *.mat                filter=lfs diff=lfs merge=lfs -text
+
+# Fotos dos palestrantes: arquivos normais no git (sem LFS) para a Vercel publicar
+public/speakers/*.png !filter !diff !merge -text
