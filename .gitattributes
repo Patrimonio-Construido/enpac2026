@@ -147,3 +147,5 @@
 
 # Fotos dos palestrantes: arquivos normais no git (sem LFS) para a Vercel publicar
 public/speakers/*.png !filter !diff !merge -text
+public/brand/*.png !filter !diff !merge -text
+public/old-editions/*.png !filter !diff !merge -text
