@@ -12,6 +12,7 @@ type ScheduleItem = {
   time: string
   type: string
   title: string
+  participants: string
 }
 
 const pages: { id: Page; label: string }[] = [
@@ -121,46 +122,46 @@ const speakers: Speaker[] = [
 
 const schedule: ScheduleItem[][] = [
   [
-    { time: "09:00", type: "Abertura", title: "Boas-vindas ao ENPAC 2026" },
-    {
-      time: "10:00",
-      type: "Conferência",
-      title: "Tema da conferência a confirmar",
+    { 
+      time: "18:00", 
+      type: "Entre a memória e a matéria", 
+      title: "Manifestações patológicas e o desafio de restaurar para preservar",
+      participants: "Karina Roquete"
     },
     {
-      time: "14:00",
-      type: "Mesa-redonda",
-      title: "Tema da mesa-redonda a confirmar",
+      time: "19:00",
+      type: "Tecnologia como subsídio à tomada de decisão",
+      title: "O caso do Museu da Moda de Belo Horizonte",
+      participants: "Caroline Amormino"
     },
-    { time: "16:30", type: "Debate", title: "Conversa com participantes" },
   ],
   [
-    { time: "09:00", type: "Conferência", title: "Tema a confirmar" },
-    {
-      time: "11:00",
-      type: "Sessão temática",
-      title: "Pesquisas e práticas em patrimônio",
+    { 
+      time: "18:00", 
+      type: "Ciência, tecnologia e preservação", 
+      title: "IoT e inteligência de dados no patrimônio cultural edificado",
+      participants: "Rodrigo Figueiredo Reis"
     },
-    { time: "14:00", type: "Oficina", title: "Atividade prática a confirmar" },
-    { time: "17:00", type: "Debate", title: "Síntese do segundo dia" },
+    {
+      time: "19:00",
+      type: "Diagnóstico e Mapeamento de Danos em Estruturas de Concreto Armado Modernistas por Ensaios Não Destrutivos",
+      title: "O Caso do Museu de Arte da Pampulha",
+      participants: "Francielle Ferreira Montanari"
+    },
   ],
   [
     {
-      time: "09:00",
-      type: "Mesa-redonda",
-      title: "Tema da mesa-redonda a confirmar",
+      time: "18:00",
+      type: "HBIM",
+      title: "Modelar, simular, diagnosticar e difundir",
+      participants: "Ana Regina Mizrahy Cupershmid"
     },
     {
-      time: "11:30",
-      type: "Apresentações",
-      title: "Trabalhos e experiências selecionadas",
+      time: "19:00",
+      type: "Caminhos da preservação",
+      title: "Experiências, avanços e os desafios contemporâneos",
+      participants: "Andréa Lanna Mendes Novais"
     },
-    {
-      time: "15:00",
-      type: "Conferência",
-      title: "Conferência de encerramento",
-    },
-    { time: "17:00", type: "Encerramento", title: "Próximos encontros" },
   ],
 ]
 
@@ -909,8 +910,7 @@ function SchedulePage() {
                 }
               }}
             >
-              <span>Dia {index + 1}</span>
-              <small>Data a definir</small>
+              <span>Dia {index + 1} - {index + 24}/11</span>
             </button>
           ))}
         </div>
@@ -927,7 +927,7 @@ function SchedulePage() {
               <div className="schedule-item-main">
                 <span>{item.type}</span>
                 <h2>{item.title}</h2>
-                <p>Participantes a confirmar</p>
+                <p>{item.participants}</p>
               </div>
               <button type="button" disabled>
                 Transmissão em breve
@@ -938,15 +938,6 @@ function SchedulePage() {
             </article>
           ))}
         </div>
-      </section>
-
-      <section className="schedule-note section">
-        <Eyebrow>Importante</Eyebrow>
-        <p>
-          Horários, atividades e links de transmissão são placeholders para
-          visualização do protótipo. A agenda oficial será publicada após a
-          confirmação da curadoria.
-        </p>
       </section>
       <CallToAction />
     </>
