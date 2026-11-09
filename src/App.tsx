@@ -45,7 +45,7 @@ const speakers: Speaker[] = [
   {
     id: 0,
     name: "Karina Roquete",
-    image: "../public/speakers/karina_roquete.png",
+    image: "/speakers/karina_roquete.png",
     lecture: "Entre a Memória e a Matéria: Manifestações Patológicas e o Desafio de Restaurar para Preservar",
     bio: [
       "Arquitetura e Urbanismo – Concluído em dezembro 2003 - Faculdade de Arquitetura e Urbanismo Itaúna /MG.",
@@ -60,7 +60,7 @@ const speakers: Speaker[] = [
   {
     id: 1,
     name: "Caroline Amormino",
-    image: "../public/speakers/caroline_amormino.png",
+    image: "/speakers/caroline_amormino.png",
     lecture: "Tecnologia Como Subsídio à Tomada de Decisão: O Caso do Museu da Moda de Belo Horizonte",
     bio: [
       "Arquiteta e Urbanista, Especialista em BIM e em Gestão de Projetos (PUC Minas), com trajetória profissional nos setores de indústria, siderurgia e mineração.",
@@ -73,7 +73,7 @@ const speakers: Speaker[] = [
   {
     id: 2,
     name: "Rodrigo Figueiredo Reis",
-    image: "../public/speakers/rodrigo_reis.png",
+    image: "/speakers/rodrigo_reis.png",
     lecture: "Ciência, Tecnologia e Preservação: IoT e inteligência de dados no patrimônio cultural edificado",
     bio: [
       "Arquiteto e urbanista, doutorando em Inovação Tecnológica pela Universidade Federal de Minas Gerais (UFMG), sob orientação do Prof. Dr. Adriano César Machado Pereira, mestre em Patrimônio Cultural e graduado em Arquitetura e Urbanismo pela Universidade Federal do Rio de Janeiro (UFRJ).",
@@ -85,7 +85,7 @@ const speakers: Speaker[] = [
   {
     id: 3,
     name: "Francielle Ferreira Montanari",
-    image: "../public/speakers/francielle_montanari.png",
+    image: "/speakers/francielle_montanari.png",
     lecture: "Diagnóstico e Mapeamento de Danos em Estruturas de Concreto Armado Modernistas por Ensaios Não Destrutivos: O Caso do Museu de Arte da Pampulha",
     bio: [
       "Arquiteta e Urbanista e Especialista em Conservação e Gestão do Patrimônio Cultural pela PUC Minas, Doutoranda e Mestra pelo Programa de Pós-Graduação em Ambiente Construído e Patrimônio Sustentável da Escola de Arquitetura da Universidade Federal de Minas Gerais (PACPS/UFMG).",
@@ -98,7 +98,7 @@ const speakers: Speaker[] = [
   {
     id: 4,
     name: "Ana Regina Mizrahy Cuperschmid",
-    image: "../public/speakers/ana_cuperschmid.png",
+    image: "/speakers/ana_cuperschmid.png",
     lecture: "HBIM: modelar, simular, diagnosticar e difundir",
     bio: [
       "Professora Associada da Faculdade de Engenharia Civil, Arquitetura e Urbanismo (FECFAU) da UNICAMP, atuando na graduação e pós-graduação da instituição.",
@@ -111,7 +111,7 @@ const speakers: Speaker[] = [
   {
     id: 5,
     name: "Andréa Lanna Mendes Novais",
-    image: "../public/speakers/andrea_novais.png",
+    image: "/speakers/andrea_novais.png",
     lecture: "Caminhos da Preservação: Experiências, Avanços e os Desafios Contemporâneos",
     bio: [
       "Arquiteta Urbanista , especialista em Urbanismo, especialista em Revitalização Urbana e Arquitetônica.",
@@ -846,7 +846,6 @@ function SpeakersPage() {
             </div>
             <div className="speaker-card-copy">
               <h2>{speaker.name}</h2>
-              <p>Instituição · País</p>
               <span>{speaker.lecture}</span>
               <button
                 className="text-link speaker-bio-button"
