@@ -446,9 +446,6 @@ function Footer({ onNavigate }: { onNavigate: (page: Page) => void }) {
             Encontro do Patrimônio Construído. Um espaço de troca entre
             pesquisa, prática e preservação.
           </p>
-          <span className="footer-note">
-            Conteúdo demonstrativo — informações de 2026 em definição.
-          </span>
         </div>
 
         <div className="footer-column">
@@ -593,7 +590,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
         <div className="hero-meta">
           <div>
             <span>Quando</span>
-            <strong>Data a definir</strong>
+            <strong>24 a 26/11</strong>
           </div>
           <div>
             <span>Onde</span>
@@ -700,9 +697,12 @@ function HomePage({ onNavigate }: { onNavigate: (page: Page) => void }) {
             className="placeholder-names"
             aria-label="Palestrantes a confirmar"
           >
-            <span>Nome a confirmar</span>
-            <span>Nome a confirmar</span>
-            <span>Nome a confirmar</span>
+            <span>Karina Roquete</span>
+            <span>Caroline Amormino</span>
+            <span>Rodrigo Figueiredo Reis</span>
+            <span>Francielle Ferreira Montanari</span>
+            <span>Ana Regina Mizrahy Cuperschmid</span>
+            <span>Andréa Lanna Mendes Novais</span>
           </div>
           <TextLink onClick={() => onNavigate("palestrantes")}>
             Conhecer palestrantes
@@ -741,23 +741,9 @@ function CallToAction({ interactive = false }: { interactive?: boolean }) {
       </span>
       <div ref={proximityContainer}>
         <Eyebrow>ENPAC 2026</Eyebrow>
-        <h2>
-          {interactive ? (
-            <VariableProximity
-              label="O próximo encontro começa por aqui."
-              containerRef={proximityContainer}
-              fromFontVariationSettings="'wght' 500"
-              toFontVariationSettings="'wght' 700"
-              radius={145}
-              falloff="gaussian"
-              smoothing={0.2}
-            />
-          ) : (
-            "O próximo encontro começa por aqui."
-          )}
-        </h2>
+        <h2>O próximo encontro começa por aqui.</h2>
         <p>
-          As datas e inscrições serão anunciadas em breve. Acompanhe as redes do
+          As inscrições serão anunciadas em breve. Acompanhe as redes do
           projeto para receber novidades.
         </p>
         <button className="button button-light" type="button">
