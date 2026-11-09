@@ -5,6 +5,7 @@ import AnimatedContent from "./components/animations/AnimatedContent"
 import StrokeText from "./components/animations/StrokeText"
 import ShinyText from "./components/animations/ShinyText"
 import VariableProximity from "./components/animations/VariableProximity"
+import { availableMemory } from "process"
 
 type Page = "inicio" | "palestrantes" | "programacao" | "edicoes"
 
@@ -23,12 +24,9 @@ const pages: { id: Page; label: string }[] = [
 ]
 
 const photos = {
-  blueDoor:
-    "https://images.unsplash.com/photo-1647869668521-c0486729d0dc?auto=format&fit=crop&w=1400&q=85",
-  street:
-    "https://images.unsplash.com/photo-1689936152585-0913f81c62e5?auto=format&fit=crop&w=1400&q=85",
-  oldDoor:
-    "https://images.unsplash.com/photo-1626125937207-9b8f176d9f3a?auto=format&fit=crop&w=1200&q=85",
+  blueDoor: "https://images.unsplash.com/photo-1647869668521-c0486729d0dc?auto=format&fit=crop&w=1400&q=85",
+  street: "https://images.unsplash.com/photo-1689936152585-0913f81c62e5?auto=format&fit=crop&w=1400&q=85",
+  oldDoor: "https://images.unsplash.com/photo-1626125937207-9b8f176d9f3a?auto=format&fit=crop&w=1200&q=85",
   arch: "https://images.unsplash.com/photo-1668715590722-9b10644387cd?auto=format&fit=crop&w=1400&q=85",
 }
 
@@ -166,10 +164,47 @@ const schedule: ScheduleItem[][] = [
 ]
 
 const editions = [
-  { year: "2023", image: photos.street, available: true },
-  { year: "2021", image: photos.blueDoor, available: false },
-  { year: "2019", image: photos.arch, available: false },
-  { year: "2018", image: photos.oldDoor, available: false },
+  { 
+    year: "2020", 
+    image: "/old-editions/edicao1.png",
+    available: false,
+    theme: "Patologia, Intervenções e Tecnologias"
+  },
+  { 
+    year: "2021", 
+    image: "/old-editions/edicao2.png",
+    available: true,
+    link: "https://sites.google.com/view/2021enpac",
+    theme: "Conhecer para Preservar, Preservar para Conhecer"
+  },
+  { 
+    year: "2022", 
+    image: "/old-editions/edicao3.png",
+    available: true,
+    link: "https://sites.google.com/view/enpac2022",
+    theme: "Paisagens Cotidianas"
+  },
+  { 
+    year: "2023", 
+    image: "/old-editions/edicao4.png",
+    available: true,
+    link: "https://sites.google.com/view/2023enpac",
+    theme: "Tecnologias e Instrumentos de Gerenciamento para Preservação"
+  },
+  { 
+    year: "2024", 
+    image: "/old-editions/edicao5.png",
+    available: true,
+    link: "https://sites.google.com/view/enpac-apt2024",
+    theme: "Perspectivas e Reflexões e 1º Congresso APTI LACC: Gestão do Patrimônio Construído"
+  },
+  {
+    year: "2025",
+    image: "/old-editions/edicao6.png",
+    available: true,
+    link: "https://sites.google.com/view/enpac2025",
+    theme: "Conservação, Recuperação e Reforço Estrutural"
+  }
 ]
 
 function ArrowIcon() {
@@ -738,12 +773,10 @@ function PageIntro({
   eyebrow,
   title,
   copy,
-  aside,
 }: {
   eyebrow: string
   title: string
   copy: string
-  aside?: string
 }) {
   return (
     <section className="page-intro">
@@ -753,7 +786,6 @@ function PageIntro({
       </div>
       <div className="page-intro-copy">
         <p>{copy}</p>
-        {aside && <span>{aside}</span>}
       </div>
     </section>
   )
@@ -881,7 +913,6 @@ function SchedulePage() {
         eyebrow="Agenda do evento"
         title="Programação"
         copy="Uma programação online pensada para aproximar ideias, experiências e pessoas."
-        aside="Programação demonstrativa · sujeita a alterações"
       />
 
       <section className="schedule-section section">
@@ -950,7 +981,6 @@ function EditionsPage() {
         eyebrow="Memória do ENPAC"
         title="Edições anteriores"
         copy="Cada encontro amplia uma conversa contínua sobre o patrimônio construído e seus futuros possíveis."
-        aside="Arquivo em atualização"
       />
 
       <section className="edition-grid section" aria-label="Edições anteriores">
@@ -962,8 +992,8 @@ function EditionsPage() {
             </div>
             <div className="edition-copy">
               <div>
-                <Eyebrow>Edição {String(index + 1).padStart(2, "0")}</Eyebrow>
-                <h2>Tema da edição</h2>
+                <Eyebrow>{String(index + 1)}ª Edição</Eyebrow>
+                <h2>{edition.theme}</h2>
                 <p>
                   Conteúdo e informações desta edição serão revisados em breve.
                 </p>
@@ -971,27 +1001,19 @@ function EditionsPage() {
               {edition.available ? (
                 <a
                   className="text-link"
-                  href="https://sites.google.com/view/2023enpac"
+                  href={edition.link}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <span>Visitar edição de 2023</span>
+                  <span>Visitar edição de {edition.year}</span>
                   <ArrowIcon />
                 </a>
               ) : (
-                <span className="archive-status">Arquivo em atualização</span>
+                <span className="archive-status">Site não disponível</span>
               )}
             </div>
           </article>
         ))}
-      </section>
-
-      <section className="archive-disclaimer section">
-        <span>Nota sobre o arquivo</span>
-        <p>
-          Os anos e temas apresentados nesta estrutura, com exceção do site de
-          2023, são demonstrativos e serão validados antes da publicação.
-        </p>
       </section>
       <CallToAction />
     </>
