@@ -120,11 +120,11 @@ const speakers: Speaker[] = [
 
 const schedule: ScheduleItem[][] = [
   [
-    { 
-      time: "18:00", 
-      type: "Entre a memória e a matéria", 
-      title: "Manifestações patológicas e o desafio de restaurar para preservar",
-      participants: "Karina Roquete"
+    {
+      time: "18:00",
+      type: "Caminhos da preservação",
+      title: "Experiências, avanços e os desafios contemporâneos",
+      participants: "Andréa Lanna Mendes Novais"
     },
     {
       time: "19:00",
@@ -152,13 +152,13 @@ const schedule: ScheduleItem[][] = [
       time: "18:00",
       type: "HBIM",
       title: "Modelar, simular, diagnosticar e difundir",
-      participants: "Ana Regina Mizrahy Cupershmid"
+      participants: "Ana Regina Mizrahy Cuperschmid"
     },
     {
       time: "19:00",
-      type: "Caminhos da preservação",
-      title: "Experiências, avanços e os desafios contemporâneos",
-      participants: "Andréa Lanna Mendes Novais"
+      type: "Entre a memória e a matéria",
+      title: "Manifestações patológicas e o desafio de restaurar para preservar",
+      participants: "Karina Roquete"
     },
   ],
 ]
